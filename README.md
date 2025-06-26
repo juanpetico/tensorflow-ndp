@@ -2,8 +2,7 @@
 Python 3.10+
 
 ## Clonar el repositorio:
-   git clone https://github.com/tu-usuario/tu-repo.git
-   cd tu-repo
+   git clone https://github.com/juanpetico/tensorflow-ndp.git
 
 ## Ejecutar entorno virtual: 
 
@@ -13,7 +12,7 @@ Python 3.10+
 4. python -m pip install --upgrade pip
 6. pip install -r requirements.txt
 
-Ejecutar:
+## Ejecutar script:
 
 1. Ejecutar el script con python clasificacion-multiclase.py
 2. Repo web/model 
