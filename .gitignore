@@ -1,0 +1,12 @@
+# Entornos virtuales
+env_tensorflowjs/
+
+# Archivos de modelo grandes
+*.h5
+web/model/
+
+# Archivos de sistema/IDE
+.DS_Store
+.vscode/
+__pycache__/
+*.pyc

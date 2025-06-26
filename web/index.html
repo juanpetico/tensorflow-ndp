@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor de Calidad del Vino</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <i class="fas fa-wine-bottle header-icon"></i>
+                <h1>Calidad del Vino</h1>
+            </div>
+            <p class="header-description">
+                Ingrese las características químicas del vino para obtener una predicción de su calidad basada en análisis avanzado
+            </p>
+        </header>
+
+        <div class="main-grid">
+            <div class="form-section">
+                <!-- Grupo de Acidez -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-tint acidity-icon"></i>
+                            <h3>Perfil de Acidez</h3>
+                        </div>
+                        <p class="card-description">Parámetros relacionados con la acidez del vino</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="fixedAcidity">Acidez Fija (g/L)</label>
+                                <input type="number" id="fixedAcidity" step="0.1" placeholder="4.6 - 15.9">
+                            </div>
+                            <div class="input-group">
+                                <label for="volatileAcidity">Acidez Volátil (g/L)</label>
+                                <input type="number" id="volatileAcidity" step="0.01" placeholder="0.12 - 1.58">
+                            </div>
+                            <div class="input-group">
+                                <label for="citricAcid">Ácido Cítrico (g/L)</label>
+                                <input type="number" id="citricAcid" step="0.01" placeholder="0.0 - 1.0">
+                            </div>
+                            <div class="input-group">
+                                <label for="pH">pH</label>
+                                <input type="number" id="pH" step="0.01" placeholder="2.74 - 4.01">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grupo de Componentes Químicos -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-flask chemical-icon"></i>
+                            <h3>Componentes Químicos</h3>
+                        </div>
+                        <p class="card-description">Azúcares, sales y compuestos químicos</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="input-grid">
+                            <div class="input-group">
+                                <label for="residualSugar">Azúcar Residual (g/L)</label>
+                                <input type="number" id="residualSugar" step="0.1" placeholder="0.9 - 15.5">
+                            </div>
+                            <div class="input-group">
+                                <label for="chlorides">Cloruros (g/L)</label>
+                                <input type="number" id="chlorides" step="0.001" placeholder="0.012 - 0.611">
+                            </div>
+                            <div class="input-group">
+                                <label for="sulphates">Sulfatos (g/L)</label>
+                                <input type="number" id="sulphates" step="0.01" placeholder="0.33 - 2.0">
+                            </div>
+                            <div class="input-group">
+                                <label for="freeSulfurDioxide">SO₂ Libre (mg/L)</label>
+                                <input type="number" id="freeSulfurDioxide" step="1" placeholder="1 - 72">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alcohol -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-thermometer-half alcohol-icon"></i>
+                            <h3>Contenido Alcohólico</h3>
+                        </div>
+                        <p class="card-description">Porcentaje de alcohol por volumen</p>
+                    </div>
+                    <div class="card-content">
+                        <div class="input-group">
+                            <label for="alcohol">Alcohol (% vol)</label>
+                            <input type="number" id="alcohol" step="0.1" placeholder="8.4 - 14.9">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel de Predicción -->
+            <div class="prediction-section">
+                <div class="card prediction-card">
+                    <div class="card-header">
+                        <h3>Predicción de Calidad</h3>
+                        <p class="card-description">Análisis basado en las características ingresadas</p>
+                    </div>
+                    <div class="card-content">
+                        <button id="predictBtn" class="predict-button" disabled>
+                            <span class="button-text">Predecir Calidad</span>
+                            <div class="loading-spinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+
+                        <div id="predictionResult" class="prediction-result" style="display: none;">
+                            <div class="separator"></div>
+                            <div class="result-content">
+                                <div class="score-display">
+                                    <div id="scoreValue" class="score-value">0/10</div>
+                                    <div id="qualityBadge" class="quality-badge">Regular</div>
+                                </div>
+                                <div class="progress-section">
+                                    <div class="progress-info">
+                                        <span>Calidad</span>
+                                        <span id="progressPercent">0%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div id="progressFill" class="progress-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="disclaimer">
+                                    <p><strong>Nota:</strong> Esta predicción se basa en un modelo simplificado.</p>
+                                    <p>Para análisis profesional, consulte con un enólogo certificado.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Información adicional -->
+                <div class="card reference-card">
+                    <div class="card-header">
+                        <h4>Rangos de Referencia</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="reference-list">
+                            <div class="reference-item">
+                                <strong>Acidez Fija:</strong> 4.6-15.9 g/L
+                            </div>
+                            <div class="reference-item">
+                                <strong>Acidez Volátil:</strong> 0.12-1.58 g/L
+                            </div>
+                            <div class="reference-item">
+                                <strong>Ácido Cítrico:</strong> 0.0-1.0 g/L
+                            </div>
+                            <div class="reference-item">
+                                <strong>pH:</strong> 2.74-4.01
+                            </div>
+                            <div class="reference-item">
+                                <strong>Alcohol:</strong> 8.4-14.9% vol
+                            </div>
+                            <div class="reference-item">
+                                <strong>SO₂ Libre:</strong> 1-72 mg/L
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <!-- <script src="script.js"></script> -->
+    
+</body>
+</html>
