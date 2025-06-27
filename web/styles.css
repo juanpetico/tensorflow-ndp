@@ -220,9 +220,9 @@ body {
 
 .score-value {
   font-size: 2.5rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #2c3e50;
 }
 
 .quality-badge {
@@ -234,21 +234,9 @@ body {
   font-weight: 600;
 }
 
-.quality-excellent {
-  background-color: #10b981;
-}
-.quality-very-good {
-  background-color: #22c55e;
-}
-.quality-good {
-  background-color: #eab308;
-}
-.quality-regular {
-  background-color: #f97316;
-}
-.quality-poor {
-  background-color: #ef4444;
-}
+.quality-excellent { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+.quality-good { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+.quality-regular { background: linear-gradient(90deg, #e74c3c, #f39c12); }
 
 .progress-section {
   margin-bottom: 1rem;
@@ -263,18 +251,17 @@ body {
 }
 
 .progress-bar {
-  width: 100%;
-  height: 8px;
-  background-color: #e5e7eb;
-  border-radius: 4px;
-  overflow: hidden;
+  height: 24px;
+  background: #f0f0f0;
+  border-radius: 12px;
+  margin: 10px 0;
+  position: relative;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 12px;
   transition: width 0.5s ease;
-  width: 0%;
 }
 
 .disclaimer {

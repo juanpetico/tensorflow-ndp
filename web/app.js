@@ -1,6 +1,6 @@
 class WineQualityPredictor {
   constructor() {
-    // Mapeo de IDs de inputs (nuevos nombres)
+    // Mapeo de inputs
     this.inputs = {
       fixedAcidity: document.getElementById("fixedAcidity"),
       volatileAcidity: document.getElementById("volatileAcidity"),
@@ -13,7 +13,7 @@ class WineQualityPredictor {
       alcohol: document.getElementById("alcohol")
     };
 
-    // Elementos de la UI
+    // Elementos UI
     this.predictBtn = document.getElementById("predictBtn");
     this.predictionResult = document.getElementById("predictionResult");
     this.scoreValue = document.getElementById("scoreValue");
@@ -31,15 +31,15 @@ class WineQualityPredictor {
   }
 
   async init() {
-    // Cargar modelo y datos
     try {
+      // Cargar modelo y datos
       [this.model, this.scaler, this.labels] = await Promise.all([
         tf.loadLayersModel('model/model.json'),
         fetch('scaler.json').then(r => r.json()),
         fetch('labels.json').then(r => r.json())
       ]);
       
-      // Habilitar eventos
+      // Configurar eventos
       Object.values(this.inputs).forEach(input => {
         input.addEventListener("input", () => this.validateForm());
       });
@@ -63,7 +63,7 @@ class WineQualityPredictor {
     this.setLoadingState(true);
     
     try {
-      // Obtener valores en el orden correcto (como en el entrenamiento)
+      // Obtener valores en el orden correcto
       const inputValues = [
         this.inputs.fixedAcidity.value,
         this.inputs.volatileAcidity.value,
@@ -78,15 +78,17 @@ class WineQualityPredictor {
 
       // Normalizar
       const normalized = this.normalize(inputValues);
-      const tensor = tf.tensor([normalized]);
+      const tensor = tf.tensor2d([normalized], [1, normalized.length]);
       
       // Predecir
       const prediction = await this.model.predict(tensor).data();
       tensor.dispose();
       
-      // Mostrar resultados
       const predictedClass = this.getPredictedClass(prediction);
-      this.displayResults(predictedClass);
+      this.displayResults({
+        score: predictedClass.score,
+        confidence: predictedClass.confidence
+      });
       
     } catch (error) {
       console.error("Prediction error:", error);
@@ -105,30 +107,45 @@ class WineQualityPredictor {
   getPredictedClass(prediction) {
     const maxIndex = prediction.indexOf(Math.max(...prediction));
     return {
-      score: this.labels[maxIndex] + 3, // Ajustar si restaste 3 durante el entrenamiento
+      score: this.labels[maxIndex] + 3,
       confidence: prediction[maxIndex]
     };
   }
 
   getQualityInfo(score) {
-    if (score >= 8) return { label: "Excelente", className: "quality-excellent" };
-    if (score >= 7) return { label: "Muy Bueno", className: "quality-very-good" };
-    if (score >= 6) return { label: "Bueno", className: "quality-good" };
-    if (score >= 5) return { label: "Regular", className: "quality-regular" };
-    return { label: "Deficiente", className: "quality-poor" };
+    if (score >= 7) return { 
+      label: "Excelente", 
+      className: "quality-excellent",
+      minScore: 7,
+      maxScore: 8
+    };
+    if (score >= 6) return { 
+      label: "Bueno", 
+      className: "quality-good",
+      minScore: 6,
+      maxScore: 6.9
+    };
+    return { 
+      label: "Regular", 
+      className: "quality-regular",
+      minScore: 3,
+      maxScore: 5.9
+    };
   }
 
   displayResults({score, confidence}) {
     const qualityInfo = this.getQualityInfo(score);
     const percentage = Math.round(confidence * 100);
 
-    this.scoreValue.textContent = `${score}/10`;
+    // Actualizar UI
+    this.scoreValue.textContent = `${score}/8`;
     this.qualityBadge.textContent = qualityInfo.label;
     this.qualityBadge.className = `quality-badge ${qualityInfo.className}`;
     
     this.progressPercent.textContent = `${percentage}%`;
     this.progressFill.style.width = `${percentage}%`;
     this.progressFill.className = `progress-fill ${qualityInfo.className}`;
+    this.progressFill.title = `Puntaje real: ${score} (${qualityInfo.label})`;
     
     this.predictionResult.style.display = "block";
   }
@@ -140,7 +157,7 @@ class WineQualityPredictor {
   }
 }
 
-// Inicialización
+// Inicializar al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
   new WineQualityPredictor();
 });
