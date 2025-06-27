@@ -63,7 +63,7 @@ model.compile(
 # 8. Entrenar el modelo.
 model.fit(
     X_train, y_train,
-    epochs=200,
+    epochs=500,
     batch_size=64,
     validation_split=0.2,
 )
@@ -72,35 +72,35 @@ model.fit(
 loss, acc = model.evaluate(X_test, y_test)
 
 total_time = time.time() - start_time
-#model.save("wine_model.h5")
+# model.save("wine_model.h5")
 
 print(f"\nTiempo total de entrenamiento: {total_time:.2f} segundos")
 print(f"\nPrecision en test: {acc:.4f} | Perdida: {loss:.4f}")
 
 #10. Predecir la calidad del vino.
-def leer_float(prompt):
-    return float(input(prompt).strip())
+# def leer_float(prompt):
+#     return float(input(prompt).strip())
 
-while True:
-    try:
-        input_data = np.array([
-            leer_float("Fijo de acidez: "),
-            leer_float("Acidez Volátil: "),
-            leer_float("Ácido Cítrico: "),
-            leer_float("Azúcar Residualr: "),
-            leer_float("Cloruros: "),
-            leer_float("SO₂ Libre: "),
-            leer_float("pH: "),
-            leer_float("Sulfatos: "),
-            leer_float("Alcohol: ")
-        ], dtype=np.float32).reshape(1, -1)
+# while True:
+#     try:
+#         input_data = np.array([
+#             leer_float("Fijo de acidez: "),
+#             leer_float("Acidez Volátil: "),
+#             leer_float("Ácido Cítrico: "),
+#             leer_float("Azúcar Residualr: "),
+#             leer_float("Cloruros: "),
+#             leer_float("SO₂ Libre: "),
+#             leer_float("pH: "),
+#             leer_float("Sulfatos: "),
+#             leer_float("Alcohol: ")
+#         ], dtype=np.float32).reshape(1, -1)
 
-        # Normalizar la entrada
-        input_data = (input_data - X_min) / (X_max - X_min)
+#         # Normalizar la entrada
+#         input_data = (input_data - X_min) / (X_max - X_min)
 
-        prediction = model.predict(input_data)
-        print(f"Predicción (probabilidades): {prediction}")
-        predicted_quality = np.argmax(prediction, axis=1)[0] + 3 
-        print(f"La calidad del vino es aproximadamente {predicted_quality}.")
-    except ValueError:
-        print("Entrada no válida. Por favor, ingrese números válidos.")
+#         prediction = model.predict(input_data)
+#         print(f"Predicción (probabilidades): {prediction}")
+#         predicted_quality = np.argmax(prediction, axis=1)[0] + 3 
+#         print(f"La calidad del vino es aproximadamente {predicted_quality}.")
+#     except ValueError:
+#         print("Entrada no válida. Por favor, ingrese números válidos.")

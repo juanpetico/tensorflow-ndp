@@ -46,7 +46,7 @@ model.compile(
 # 7. Entrenar el modelo.
 model.fit(
     X_train, y_train,
-    epochs=50,
+    epochs=500,
     validation_split=0.2
 )
 

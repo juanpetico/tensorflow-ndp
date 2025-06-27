@@ -30,8 +30,8 @@ y_train, y_test = y[:split_idx], y[split_idx:]
 
 # 6. Estructura de la red neuronal
 model = tf.keras.Sequential([
-    # tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
-    # tf.keras.layers.Dense(32, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Dense(32, activation='relu'),
     tf.keras.layers.Dense(1)
 ])
 
@@ -39,7 +39,7 @@ model = tf.keras.Sequential([
 model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
 # 8. Entrenar el modelo
-model.fit(X_train, y_train, epochs=100, validation_split=0.2)
+model.fit(X_train, y_train, epochs=500, validation_split=0.2)
 
 # 9. Evaluar el modelo
 loss, mae = model.evaluate(X_test, y_test)

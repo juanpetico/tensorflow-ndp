@@ -4,7 +4,7 @@ Python 3.10+
 ## Clonar el repositorio:
    git clone https://github.com/juanpetico/tensorflow-ndp.git
 
-## Ejecutar entorno virtual: 
+## Ejecutar en entorno virtual para su uso: 
 
 1. pip install virtualenv
 2. python -m venv mi_entorno 

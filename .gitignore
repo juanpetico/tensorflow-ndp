@@ -1,6 +1,6 @@
 # Entornos virtuales
 env_tensorflowjs/
-
+mi_entorno/
 # Archivos de modelo grandes
 *.h5
 web/model/
