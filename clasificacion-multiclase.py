@@ -72,7 +72,7 @@ model.fit(
 loss, acc = model.evaluate(X_test, y_test)
 
 total_time = time.time() - start_time
-# model.save("wine_model.h5")
+model.save("wine_model.h5")
 
 print(f"\nTiempo total de entrenamiento: {total_time:.2f} segundos")
 print(f"\nPrecision en test: {acc:.4f} | Perdida: {loss:.4f}")
